@@ -113,7 +113,7 @@ class DBModel {
             FROM guests g
             LEFT JOIN confirmation c ON c.id_guest = g.id
             WHERE g.active = 1
-            ORDER BY g.id DESC
+            ORDER BY g.name ASC
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
