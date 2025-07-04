@@ -10,16 +10,14 @@
       </div>
 
       <?php
-$start = date('Ymd', strtotime(EVENT_DAY));
-$end = date('Ymd', strtotime(EVENT_DAY . ' +1 day'));
+        $start = date('Ymd', strtotime(EVENT_DAY));
+        $end = date('Ymd', strtotime(EVENT_DAY . ' +1 day'));
 
-$googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    . "&text=" . urlencode(EVENT_TITLE)
-    . "&dates={$start}/{$end}"
-    . "&details=" . urlencode(EVENT_DESCRIPTION)
-    . "&location=" . urlencode(EVENT_LOCATION);
-
-
+        $googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+            . "&text=" . urlencode(EVENT_TITLE)
+            . "&dates={$start}/{$end}"
+            . "&details=" . urlencode(EVENT_DESCRIPTION)
+            . "&location=" . urlencode(EVENT_LOCATION);
       ?>
 
       <div class="flex justify-center gap-5 p-2">
@@ -136,7 +134,59 @@ $googleUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE"
           
         </form>
 
+        <div class="mb-5">
+          <a class="text-sm text-blue-500 hover:text-yellow-500 cursor-pointer" @click="requestModal.show()">
+            No aparezco en la lista
+          </a>
+        </div>
+
       </div>
+
+      <!----MODALS---->
+      <div
+          x-show="requestModal.open"
+          @click.away="requestModal.open = false"
+          @keydown.escape.window="requestModal.open = false"
+          class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          style="display: none;"
+      >
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative">
+              <button
+              @click="requestModal.open = false"
+              class="absolute top-0 right-3 text-gray-500 hover:text-red-500 text-3xl"
+              >&times;</button>
+              <h2 class="text-xl mb-4">Solicitud de invitación</h2>
+
+              <template x-if="requestModal.errors">
+                  <div class="text-red-600 text-center mb-2" x-text="requestModal.errors"></div>
+              </template>
+
+              <div>
+                  <input
+                      type="text"
+                      x-model="requestModal.name"
+                      class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition w-full mb-2"
+                      placeholder="Nombre completo"
+                      required
+                  >
+                  <input
+                      type="text"
+                      x-model="requestModal.contact"
+                      class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition w-full mb-2"
+                      placeholder="Teléfono o email"
+                  >
+              </div>
+
+              <div class="flex justify-end gap-3">
+              <button
+                  @click="requestSend()"
+                  class="button text-white rounded-full px-6 transition flex items-center gap-2 py-2"
+              >Enviar solicitud</button>
+              </div>
+              
+          </div>
+      </div>
+      <!------------------------------>
       
     </div>
   </div>

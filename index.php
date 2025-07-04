@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+
 require_once 'utils/router.php';
 
 require_once 'data.php';
@@ -22,9 +27,7 @@ $router->get('invite-{id}', function ($id) {
 });
 
 $router->get('admin', function () {
-    PageController::header();
     PageController::admin();
-    PageController::footer();
 });
 
 $router->get('logout', function () {
@@ -44,12 +47,20 @@ $router->post('admin/save', function () {
     FormController::addGuest();
 });
 
+$router->post('saveRequest', function () {
+    FormController::addGuestInactive();
+});
+
 $router->get('admin/getguests', function () {
     FormController::getGuests();
 });
 
 $router->get('admin/delete/{id}', function ($id) {
     FormController::deleteGuest($id);
+});
+
+$router->get('admin/invite/{id}', function ($id) {
+    FormController::inviteRequest($id);
 });
 
 $router->post('admin/update', function () {

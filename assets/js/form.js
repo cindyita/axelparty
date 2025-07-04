@@ -9,6 +9,16 @@ function homeManager() {
         msg: '',
         errors: '',
         loading: false,
+        
+        requestModal: {
+            open: false,
+            name: '',
+            contact: '',
+            errors:'',
+            show() {
+                this.open = true;
+            }
+        },
 
         async submitForm() {
             this.loading = true;
@@ -39,6 +49,40 @@ function homeManager() {
             } finally {
                 this.loading = false;
             }
-        }
+        },
+
+        async requestSend() {
+            if (!this.requestModal.name.trim()) {
+                this.requestModal.errors = "El nombre es obligatorio";
+                setTimeout(() => this.requestModal.errors = '', 10000);
+                return;
+            }
+
+            try {
+                const res = await fetch('saveRequest', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: this.requestModal.name, contact: this.requestModal.contact }),
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                this.requestModal.open = false;
+                this.msg = "Se ha enviado tu solicitud.";
+                this.requestModal.name = '';
+                this.requestModal.contact = '';
+                setTimeout(() => this.msg = '', 8000);
+                } else {
+                    this.requestModal.errors = "Error al agregar invitado";
+                    setTimeout(() => this.requestModal.errors = '', 10000);
+                    console.log(data);
+                }
+            } catch (e) {
+                this.requestModal.errors = "Error fatal";
+                console.log(e);
+                setTimeout(() => this.requestModal.errors = '', 10000);
+            }
+        },
     }
 }

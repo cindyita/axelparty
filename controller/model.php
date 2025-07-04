@@ -16,7 +16,8 @@ class DBModel {
                 self::$pdo->exec("CREATE TABLE IF NOT EXISTS guests (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
-                    contact TEXT
+                    contact TEXT,
+                    active INTEGER DEFAULT 1
                 )");
 
                 self::$pdo->exec("CREATE TABLE IF NOT EXISTS confirmation (
@@ -36,13 +37,14 @@ class DBModel {
         return self::$pdo;
     }
 
-    public static function saveGuest($name, $contact) {
+    public static function saveGuest($name, $contact, $active) {
         try {
             $pdo = self::connect();
-            $stmt = $pdo->prepare("INSERT INTO guests (name, contact) VALUES (:name, :contact)");
+            $stmt = $pdo->prepare("INSERT INTO guests (name, contact, active) VALUES (:name, :contact,:active)");
             $result = $stmt->execute([
                 ':name' => $name,
-                ':contact' => $contact
+                ':contact' => $contact,
+                ':active'=> $active
             ]);
             return $result ? true : false;
         } catch (PDOException $e) {
@@ -89,9 +91,28 @@ class DBModel {
                         CASE WHEN c.extras > 0 THEN ' [+' || c.extras || ']' ELSE '' END
                     ELSE NULL
                 END AS confirm,
-                c.congrats 
+                c.congrats, g.active
             FROM guests g
             LEFT JOIN confirmation c ON c.id_guest = g.id
+            ORDER BY g.id DESC
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAllGuestsActive() {
+        $pdo = self::connect();
+        $stmt = $pdo->query("SELECT 
+                g.id, g.name, g.contact, 
+                CASE 
+                    WHEN c.confirm IS NOT NULL THEN 
+                        c.confirm || ' (' || strftime('%d-%m-%Y', c.date_confirm) || ')' || 
+                        CASE WHEN c.extras > 0 THEN ' [+' || c.extras || ']' ELSE '' END
+                    ELSE NULL
+                END AS confirm,
+                c.congrats, g.active
+            FROM guests g
+            LEFT JOIN confirmation c ON c.id_guest = g.id
+            WHERE g.active = 1
             ORDER BY g.id DESC
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -126,6 +147,24 @@ class DBModel {
             return $result;
         } catch (PDOException $e) {
             error_log("Error en updateGuest: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function inviteRequest($id) {
+        try {
+            $pdo = self::connect();
+            $stmt = $pdo->prepare("
+                UPDATE guests
+                SET active = 1
+                WHERE id = :id
+            ");
+            $result = $stmt->execute([
+                ':id' => $id
+            ]);
+            return $result;
+        } catch (PDOException $e) {
+            error_log("Error al invitar: " . $e->getMessage());
             return false;
         }
     }

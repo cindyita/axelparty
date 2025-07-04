@@ -11,12 +11,22 @@
                     placeholder="Nombre completo"
                     required
                 >
-                <input
-                    type="text"
-                    x-model="contact"
-                    class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition"
-                    placeholder="Teléfono/email"
-                >
+                <div class="flex gap-2">
+                    <input
+                        type="text"
+                        x-model="contact"
+                        class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition"
+                        placeholder="Teléfono/email"
+                    >
+                    <select
+                        x-model="active"
+                        class="input w-full border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition"
+                    >
+                        <option value="1">Invitado</option>
+                        <option value="0">En espera</option>
+                    </select>
+                </div>
+                
                 <button
                     type="submit"
                     class="button text-white rounded-full px-6 transition flex items-center gap-2 py-2">
@@ -68,26 +78,27 @@
                     <template x-for="guest in guestsFilter()" :key="guest.id">
                         <tr>
                             
-                            <td class="p-2 md:table-cell font-medium border border-blue-300" x-text="guest.id">
+                            <td class="p-2 md:table-cell font-medium border border-blue-300" :class="{ 'bg-red-200': !guest.active }" x-text="guest.id">
                             </td>
-                            <td class="p-2 md:table-cell font-medium border border-blue-300" x-text="guest.name">
+                            <td class="p-2 md:table-cell font-medium border border-blue-300" :class="{ 'bg-red-200': !guest.active }" :class="{ 'bg-red-200': !guest.active }" x-text="guest.name">
                             </td>
-                            <td class="p-2 md:table-cell border border-blue-300" x-text="guest.contact">
+                            <td class="p-2 md:table-cell border border-blue-300" :class="{ 'bg-red-200': !guest.active }" x-text="guest.contact">
                             </td>
-                            <td class="p-2 md:table-cell border border-blue-300" x-text="guest.confirm">
+                            <td class="p-2 md:table-cell border border-blue-300" :class="{ 'bg-red-200': !guest.active }" x-text="guest.confirm">
                             </td>
                             <td
                             class="p-2 border border-blue-300 hover:underline"
+                            :class="{ 'bg-red-200': !guest.active }"
                             >   
-                                <span x-show="guest.congrats" @click="modal.mostrar(guest.congrats, guest.name)" class="cursor-pointer">
-                                    <span x-text="guest.congrats.length > 24 ? guest.congrats.slice(0, 24) + '…' : guest.congrats"></span>
+                                <span x-show="guest.congrats" @click="modal.show(guest.congrats, guest.name)" class="cursor-pointer">
+                                    <span x-text="guest.congrats ? (guest.congrats.length > 24 ? guest.congrats.slice(0, 24) + '…' : guest.congrats) : ''"></span>
                                     <span class="text-teal-500 ml-1">[Ver más]</span>
                                 </span>
 
                             </td>
-                            <td class="p-2 md:table-cell  font-medium border border-blue-300">
+                            <td class="p-2 md:table-cell  font-medium border border-blue-300" :class="{ 'bg-red-200': !guest.active }">
                                 <div class="flex gap-2 items-center">
-                                    <a class="cursor-pointer group" @click="confirmModal.mostrar('¿Eliminar a ' + guest.name + '?', () => deleteGuest(guest.id))">
+                                    <a class="cursor-pointer group" @click="confirmModal.show('¿Eliminar a ' + guest.name + '?', () => deleteGuest(guest.id))">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512">
                                             <path
                                             fill="#6d9ecb"
@@ -97,12 +108,16 @@
                                         </svg>
                                     </a>
 
-                                    <a class="cursor-pointer group" @click="editModal.mostrar(guest.id,guest.name,guest.contact)">
+                                    <a x-show="guest.active" class="cursor-pointer group" @click="editModal.show(guest.id,guest.name,guest.contact)">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 512 512"><path fill="#6d9ecb" class="group-hover:fill-yellow-500 transition-colors duration-200" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
                                     </a>
 
-                                    <a class="cursor-pointer group" @click="copyLink.copy(guest.id)">
+                                    <a x-show="guest.active" class="cursor-pointer group" @click="copyLink.copy(guest.id)">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20" width="25" viewBox="0 0 640 512"><path fill="#6d9ecb" class="group-hover:fill-teal-400 transition-colors duration-200" d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"/></svg>
+                                    </a>
+
+                                    <a x-show="!guest.active">
+                                        <button @click="invite(guest.id)" class="button-secondary text-white rounded-full px-3 transition flex items-center gap-2 py-1">Invitar</button>
                                     </a>
 
                                 </div>
@@ -165,7 +180,7 @@
             >Cancelar</button>
             
             <button
-                @click="confirmModal.confirmar()"
+                @click="confirmModal.confirmAction()"
                 class="button text-white rounded-full px-6 transition flex items-center gap-2 py-2 bg-red-600 hover:bg-red-700"
             >Eliminar</button>
             </div>

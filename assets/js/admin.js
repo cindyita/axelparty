@@ -2,6 +2,7 @@ function guestManager() {
   return {
     name: '',
     contact: '',
+    active: 1,
     msg: '',
     errors: '',
     guests: [],
@@ -20,7 +21,7 @@ function guestManager() {
       open: false,
       msg: '',
       name: '',
-      mostrar(msg,name) {
+      show(msg,name) {
         this.msg = msg;
         this.name = name;
         this.open = true;
@@ -29,11 +30,11 @@ function guestManager() {
     confirmModal: {
       open: false,
       msg: '',
-      confirmar: () => {},
+      confirmAction: () => {},
 
-      mostrar(msg, accion) {
+      show(msg, accion) {
         this.msg = msg;
-        this.confirmar = accion;
+        this.confirmAction = accion;
         this.open = true;
       }
     },
@@ -42,7 +43,7 @@ function guestManager() {
       id: '',
       name: '',
       contact: '',
-      mostrar(id,name,contact) {
+      show(id,name,contact) {
         this.id = id;
         this.name = name;
         this.contact = contact;
@@ -125,16 +126,19 @@ function guestManager() {
         const res = await fetch('admin/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: this.name, contact: this.contact }),
+          body: JSON.stringify({ name: this.name, contact: this.contact, active: this.active }),
         });
 
         const data = await res.json();
 
         if (data.success) {
-          this.guests.unshift({ id: data.id, name: this.name, contact: this.contact, confirm:'()',congrats:'' });
+          this.guests.unshift({ id: +data.id, name: this.name, contact: this.contact, confirm: '', congrats: '', active: +this.active });
+          console.log(this.guests);
+          
           this.msg = "Invitado agregado correctamente";
           this.name = '';
           this.contact = '';
+          this.active = 1;
           setTimeout(() => this.msg = '', 8000);
         } else {
             this.errors = "Error al agregar invitado";
@@ -207,6 +211,31 @@ function guestManager() {
           console.log(res);
           setTimeout(() => this.errors = '', 10000);
       }
+    },
+    async invite(id) {
+
+        try {
+            const res = await fetch(`admin/invite/${id}`, {
+                method: 'GET'
+            });
+
+         const data = await res.json();
+
+            if (data.success) {
+              const index = this.guests.findIndex(g => g.id === id);
+              if (index !== -1) {
+                this.guests[index].active= 1
+              }
+              this.msg = "Se ha agregado la invitación";
+              this.confirmModal.open = false;
+            } else {
+                this.errors = "Error al invitar.";
+            }
+        } catch (e) {
+            this.errors = "Error fatal.";
+            console.error(e);
+        }
+      setTimeout(() => { this.errors = ''; this.msg = '' }, 10000);
     }
     
   }
@@ -216,7 +245,7 @@ function modal() {
   return {
     open: false,
     msg: '',
-    mostrar(msg) {
+    show(msg) {
       this.msg = msg;
       this.open = true;
     }

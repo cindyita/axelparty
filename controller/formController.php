@@ -30,7 +30,32 @@ class FormController {
 
         $success = DBModel::saveGuest(
             $data['name'],
-            $data['contact']
+            $data['contact'],
+            $data['active']
+        );
+
+        if($success){
+            $id = DBModel::lastId();
+            echo json_encode(['success' => $success, 'id' => $id]);
+        }else{
+            echo json_encode(['success' => false, 'error' => 'Error No se pudo guardar']);
+            exit;
+        }
+
+    }
+
+    public static function addGuestInactive(){
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (!$data || !isset($data['name'])) {
+            echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
+            exit;
+        }
+
+        $success = DBModel::saveGuest(
+            $data['name'],
+            $data['contact'],
+            0
         );
 
         if($success){
@@ -75,5 +100,15 @@ class FormController {
             exit;
         }
 
+    }
+
+    public static function inviteRequest($id){
+        $success = DBModel::inviteRequest($id);
+        if($success){
+            echo json_encode(['success' => $success]);
+        }else{
+            echo json_encode(['success' => false, 'error' => 'Error No se pudo eliminar']);
+            exit;
+        }
     }
 }
