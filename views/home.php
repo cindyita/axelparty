@@ -36,6 +36,31 @@
         </div>
       </div>
 
+      <div 
+        x-data="countdown('<?= EVENT_DAY . 'T' . EVENT_START; ?>')" 
+        x-init="startCountdown()" 
+        class="text-center text-lg font-semibold text-gray-700 animate__animated animate__fadeInUp animate__delay-3s"
+      >
+        <div class="flex justify-center gap-4 text-2xl mt-4">
+          <div class="rounded-full bg-yellow-300 py-2 px-4">
+            <span x-text="days" class="text-2sl"></span>
+            <div class="text-sm text-gray-500">días</div>
+          </div>
+          <div class="rounded-full bg-yellow-300 py-2 px-4">
+            <span x-text="hours"> class="text-2sl"</span>
+            <div class="text-sm text-gray-500">horas</div>
+          </div>
+          <div class="rounded-full bg-yellow-300 py-2 px-4">
+            <span x-text="minutes" class="text-2sl"></span>
+            <div class="text-sm text-gray-500">minutos</div>
+          </div>
+          <div class="rounded-full bg-yellow-300 py-2 px-4">
+            <span x-text="seconds" class="text-2sl"></span>
+            <div class="text-sm text-gray-500">segundos</div>
+          </div>
+        </div>
+      </div>
+
       <div class="animate__animated animate__fadeInUp animate__delay-3s">
         <p class="text-center text-md py-4"><?= EVENT_DESCRIPTION ?></p>
       </div>

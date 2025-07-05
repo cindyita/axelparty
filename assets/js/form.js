@@ -86,3 +86,33 @@ function homeManager() {
         },
     }
 }
+
+function countdown(targetDateStr) {
+    return {
+      targetDate: new Date(targetDateStr),
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+
+      startCountdown() {
+        this.updateCountdown();
+        setInterval(() => this.updateCountdown(), 1000);
+      },
+
+      updateCountdown() {
+        const now = new Date();
+        const diff = this.targetDate - now;
+
+        if (diff <= 0) {
+          this.days = this.hours = this.minutes = this.seconds = 0;
+          return;
+        }
+
+        this.days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        this.hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        this.minutes = Math.floor((diff / (1000 * 60)) % 60);
+        this.seconds = Math.floor((diff / 1000) % 60);
+      }
+    }
+  }
