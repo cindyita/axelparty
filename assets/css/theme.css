@@ -4,7 +4,7 @@
   --secondary: #6d9ecb;
   --tertiary: #97d2cc;
   --accent: #ffde59;
-  --font: #6d9ecb;
+  --font: #c4e8ff;
   --fontBox: #97d2cc;
   --text:#05306b;
   --fontOpacity: 0.50;
@@ -74,4 +74,42 @@
 .bubble-line {
   width: 100%;
   border-bottom: 5px dotted var(--accent);
+}
+
+.loader-page {
+  width: 100%;
+  height: 100%;
+  background: var(--font);
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.loader-content {
+  width: 100%;
+  height: 100%;
+}
+
+.loader {
+  --r1: 154%;
+  --r2: 68.5%;
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(var(--r1) var(--r2) at top, rgba(0, 0, 0, 0) 79.5%, white 80%), radial-gradient(var(--r1) var(--r2) at bottom, white 79.5%, rgba(0, 0, 0, 0) 80%), radial-gradient(var(--r1) var(--r2) at top, rgba(0, 0, 0, 0) 79.5%, white 80%), var(--font);
+  background-size: 50.5% 220%;
+  background-position: -100% 0%, 0% 0%, 100% 0%;
+  animation: l9 2s infinite linear;
+}
+@keyframes l9 {
+  33% {
+    background-position: 0% 33%, 100% 33%, 200% 33%;
+  }
+  66% {
+    background-position: -100% 66%, 0% 66%, 100% 66%;
+  }
+  100% {
+    background-position: 0% 100%, 100% 100%, 200% 100%;
+  }
 }/*# sourceMappingURL=theme.css.map */

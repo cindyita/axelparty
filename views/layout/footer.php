@@ -10,5 +10,7 @@
 
 <div class="bg-font"></div>
 
+<script src="./assets/js/app.js"></script>
+
 </body>
 </html>
