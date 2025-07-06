@@ -31,8 +31,6 @@ function homeManager() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(this.form)
                 });
-            
-
                 const result = await res.json();
 
                 if (result.success) {

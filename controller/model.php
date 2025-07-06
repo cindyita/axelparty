@@ -37,6 +37,12 @@ class DBModel {
         return self::$pdo;
     }
 
+    public static function disconnect() {
+        if (self::$pdo) {
+            self::$pdo = null;
+        }
+    }
+
     public static function saveGuest($name, $contact, $active) {
         try {
             $pdo = self::connect();

@@ -41,31 +41,39 @@
         x-init="startCountdown()" 
         class="text-center text-lg font-semibold text-gray-700 animate__animated animate__fadeInUp animate__delay-3s"
       >
-        <div class="flex justify-center gap-4 text-2xl mt-4">
-          <div class="rounded-full bg-yellow-300 py-2 px-4">
-            <span x-text="days" class="text-2sl"></span>
-            <div class="text-sm text-gray-500">días</div>
+        <div class="flex justify-center gap-4 text-2xl mt-4 flex-col md:flex-row">
+
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="rounded-full bg-yellow-300 py-2 px-4">
+              <span x-text="days" class="text-2sl"></span>
+              <div class="text-sm text-gray-500">días</div>
+            </div>
+            <div class="rounded-full bg-yellow-300 py-2 px-4">
+              <span x-text="hours"> class="text-2sl"</span>
+              <div class="text-sm text-gray-500">horas</div>
+            </div>
           </div>
-          <div class="rounded-full bg-yellow-300 py-2 px-4">
-            <span x-text="hours"> class="text-2sl"</span>
-            <div class="text-sm text-gray-500">horas</div>
+
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="rounded-full bg-yellow-300 py-2 px-4">
+              <span x-text="minutes" class="text-2sl"></span>
+              <div class="text-sm text-gray-500">minutos</div>
+            </div>
+            <div class="rounded-full bg-yellow-300 py-2 px-4">
+              <span x-text="seconds" class="text-2sl"></span>
+              <div class="text-sm text-gray-500">segundos</div>
+            </div>
           </div>
-          <div class="rounded-full bg-yellow-300 py-2 px-4">
-            <span x-text="minutes" class="text-2sl"></span>
-            <div class="text-sm text-gray-500">minutos</div>
-          </div>
-          <div class="rounded-full bg-yellow-300 py-2 px-4">
-            <span x-text="seconds" class="text-2sl"></span>
-            <div class="text-sm text-gray-500">segundos</div>
-          </div>
+          
         </div>
+
       </div>
 
       <div class="animate__animated animate__fadeInUp animate__delay-3s">
         <p class="text-center text-md py-4"><?= EVENT_DESCRIPTION ?></p>
       </div>
 
-      <div class="py-4 text-center w-full flex gap-5 items-center justify-center">
+      <div class="py-4 text-center w-full flex flex-col md:flex-row gap-5 items-center justify-center">
         <div class="flex gap-2 items-center animate__animated animate__delay-4s animate__flipInX">
           <span title="Vestimenta (dress code)">
             <svg xmlns="http://www.w3.org/2000/svg" height="20" width="25" viewBox="0 0 640 512"><path class="fill-blue-400" d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0l12.6 0c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7 480 448c0 35.3-28.7 64-64 64l-192 0c-35.3 0-64-28.7-64-64l0-250.3-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0l12.6 0z"/></svg>
@@ -123,7 +131,7 @@
               placeholder="Escribe una tarjeta de felicitaciones"></textarea>
           </div>
 
-          <div class="flex gap-3 w-full">
+          <div class="flex gap-3 w-full flex-col md:flex-row">
 
             <div class="w-full">
               <select
@@ -139,7 +147,7 @@
             <div>
               <select
                 x-model="form.extras"
-                class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition" title="Invitados extras (Solo tu o tu+cuantos)"
+                class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-4 py-2 transition w-full" title="Invitados extras (Solo tu o tu+cuantos)"
               >
                 <option value="0">Yo</option>
                 <option value="1">+1</option>
@@ -150,7 +158,7 @@
 
             <button
               type="submit"
-              class="button text-white rounded-full px-6 transition flex items-center gap-2">
+              class="button text-white rounded-full px-6 py-2 transition flex items-center gap-2">
               Confirmar
               <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512"><path fill="#ffffff" d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
             </button>
@@ -160,7 +168,7 @@
         </form>
 
         <div class="mb-5">
-          <a class="text-sm text-blue-500 hover:text-yellow-500 cursor-pointer" @click="requestModal.show()">
+          <a class="text-sm text-blue-800 hover:text-yellow-500 cursor-pointer text-shadow" @click="requestModal.show()">
             No aparezco en la lista
           </a>
         </div>

@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 session_start();
 
@@ -11,7 +11,6 @@ require_once 'controller/pageController.php';
 require_once 'controller/formController.php';
 
 $router = new Router();
-
 
 // GET ----------------------------
 $router->get('/', function () {
@@ -70,4 +69,6 @@ $router->post('admin/update', function () {
 // RUN ------------------------------
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_GET['r'] ?? '');
 
-
+register_shutdown_function(function () {
+    DBModel::disconnect();
+});
