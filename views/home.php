@@ -168,7 +168,7 @@
         </form>
 
         <div class="mb-5">
-          <a class="text-sm text-blue-800 hover:text-yellow-500 cursor-pointer text-shadow" @click="requestModal.show()">
+          <a class="text-sm text-blue-800 hover:text-yellow-500 cursor-pointer" @click="requestModal.show()">
             No aparezco en la lista
           </a>
         </div>

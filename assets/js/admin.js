@@ -248,6 +248,34 @@ function guestManager() {
             console.error(e);
         }
       setTimeout(() => { this.errors = ''; this.msg = '' }, 10000);
+    },
+
+    exportTableToCSV(archiveName, idTable) {
+      this.exporting = true;
+      
+      // $nextTick(() => {
+          setTimeout(() => {
+              const table = document.getElementById(idTable);
+              let csv = [];
+
+              for (let row of table.rows) {
+                  let cols = [...row.cells].map(cell => {
+                      let text = cell.innerText.replace(/"/g, '""');
+                      return `"${text}"`;
+                  });
+                  csv.push(cols.join(","));
+              }
+
+              const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = archiveName;
+              link.click();
+
+              this.exporting = false;
+          }, 100);
+      // });
     }
     
   }
