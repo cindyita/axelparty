@@ -54,6 +54,10 @@ $router->get('admin/getguests', function () {
     FormController::getGuests();
 });
 
+$router->get('admin/getstats', function () {
+    FormController::getStats();
+});
+
 $router->get('admin/delete/{id}', function ($id) {
     FormController::deleteGuest($id);
 });

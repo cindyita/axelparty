@@ -67,6 +67,18 @@ function guestManager() {
         setTimeout(() => this.msg = '', 6000);
       }
     },
+    statsModal: {
+      open: false,
+      msg: '',
+      stats: {total_guests: 0, total_confirm: 0, total_si: 0, total_no: 0, total_talvez: 0, total_attend: 0},
+      async show(msg) {
+        this.msg = msg;
+        const res = await fetch('admin/getstats');
+        const data = await res.json();
+        this.stats = data[0];
+        this.open = true;
+      }
+    },
 
     sortColumn: 'id',
     sortAsc: false,

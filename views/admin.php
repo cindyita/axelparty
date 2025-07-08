@@ -51,14 +51,21 @@
     
     <div class="p-5 bg-white rounded-lg border border-blue-300">
 
-        <div>
-            <input
-                type="text"
-                x-model="filter"
-                class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-3 py-1 text-sm mb-3 transition"
-                placeholder="Buscar.."
-                required
-            >
+        <div class="flex gap-2 items-center">
+            <div>
+                <button @click="statsModal.show()" class="button-secondary text-white rounded-full px-4 transition flex items-center gap-2 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="20" height="20"><path class="fill-white" d="M304 240l0-223.4c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16L304 240zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4L256 288 412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288l238.4 0z"/></svg>
+                </button>
+            </div>
+            <div class="mt-3">
+                <input
+                    type="text"
+                    x-model="filter"
+                    class="input border border-blue-300 rounded-full focus:outline-none focus:ring-4 focus:ring-blue-300 px-3 py-2 text-sm mb-3 transition"
+                    placeholder="Buscar.."
+                    required
+                >
+            </div>
         </div>
 
         <div class="relative overflow-x-auto pb-2">
@@ -147,7 +154,7 @@
         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         style="display: none;"
     >
-        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative">
+        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative mx-3">
             <button
             @click="modal.open = false"
             class="absolute top-0 right-3 text-gray-500 hover:text-red-500 text-3xl"
@@ -164,7 +171,7 @@
         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         style="display: none;"
     >
-        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm relative">
+        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm relative mx-3">
             <button
             @click="confirmModal.open = false"
             class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl"
@@ -194,7 +201,7 @@
         class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         style="display: none;"
     >
-        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm relative">
+        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm relative mx-3">
             <button
             @click="editModal.open = false"
             class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl"
@@ -222,6 +229,46 @@
                 @click="update()"
                 class="button text-white rounded-full px-6 transition flex items-center gap-2 py-2"
             >Editar</button>
+            </div>
+        </div>
+    </div>
+
+    <div
+        x-show="statsModal.open"
+        @click.away="statsModal.open = false"
+        @keydown.escape.window="statsModal.open = false"
+        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        style="display: none;"
+    >
+        <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative mx-3">
+            <button
+            @click="statsModal.open = false"
+            class="absolute top-0 right-3 text-gray-500 hover:text-red-500 text-3xl"
+            >&times;</button>
+            <h2 class="text-xl mb-4">Estadísticas</h2>
+            <div>
+                <table class="w-full text-sm text-left rtl:text-right">
+                <tbody>
+                    <tr>
+                        <td>Total de invitados: <span class="text-teal-500" x-text="statsModal.stats.total_guests"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Total de confirmados: <span class="text-teal-500" x-text="statsModal.stats.total_confirm"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Total de confirmados "Si": <span class="text-teal-500" x-text="statsModal.stats.total_si"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Total de confirmados "No": <span class="text-teal-500" x-text="statsModal.stats.total_no"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Total de confirmados "Tal vez": <span class="text-teal-500" x-text="statsModal.stats.total_talvez"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Total de asistentes al evento (Considerando a los confirmados "Si" y sus extras): <span class="text-teal-500" x-text="statsModal.stats.total_attend"></span></td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
     </div>

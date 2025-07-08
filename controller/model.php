@@ -131,6 +131,22 @@ class DBModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function getStats() {
+        $pdo = self::connect();
+        $stmt = $pdo->query("SELECT
+                    COUNT(g.id) AS total_guests,
+                    COUNT(c.id) AS total_confirm,
+                    SUM(CASE WHEN c.confirm = 'Si' THEN 1 ELSE 0 END) AS total_si,
+                    SUM(CASE WHEN c.confirm = 'No' THEN 1 ELSE 0 END) AS total_no,
+                    SUM(CASE WHEN c.confirm = 'Tal vez' THEN 1 ELSE 0 END) AS total_talvez,
+                    SUM(CASE WHEN c.confirm = 'Si' THEN 1 + IFNULL(c.extras, 0) ELSE 0 END) AS total_attend
+                FROM guests g
+                LEFT JOIN confirmation c ON g.id = c.id_guest
+                WHERE g.active = 1;
+                ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function deleteGuest($id){
         $pdo = DBModel::connect();
         $stmt = $pdo->prepare("DELETE FROM guests WHERE id = :id");

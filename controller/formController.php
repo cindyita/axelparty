@@ -73,6 +73,11 @@ class FormController {
         echo json_encode($guests);
     }
 
+    public static function getStats(){
+        $get = DBModel::getStats();
+        echo json_encode($get);
+    }
+
     public static function deleteGuest($id){
         $success = DBModel::deleteGuest($id);
         if($success){
