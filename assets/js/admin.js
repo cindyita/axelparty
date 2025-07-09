@@ -254,7 +254,7 @@ function guestManager() {
       this.exporting = true;
       
       // $nextTick(() => {
-          setTimeout(() => {
+      setTimeout(() => {
               const table = document.getElementById(idTable);
               let csv = [];
 

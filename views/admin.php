@@ -86,6 +86,7 @@
                         <th @click="sortBy('contact')" class="py-1 px-2 border border-blue-300 bg-teal-100 cursor-pointer">Contacto <span class="text-lg text-teal-400" x-text="sortColumn != 'contact' ? '↕' :(sortAsc ? '↑' : '↓')"></span></th>
                         <th @click="sortBy('confirm')" class="py-1 px-2 border border-blue-300 bg-teal-100 cursor-pointer">Confirmación <span class="text-lg text-teal-400" x-text="sortColumn != 'confirm' ? '↕' :(sortAsc ? '↑' : '↓')"></span></th>
                         <th class="p-2 border border-blue-300 bg-teal-100">Felicitaciones</th>
+                        <th x-show="false">Felicitaciones (Completo)</th>
                         <th class="py-1 px-2 border border-blue-300 bg-teal-100"></th>
                     </tr>
                 </thead>
@@ -105,14 +106,12 @@
                             class="p-2 border border-blue-300 hover:underline"
                             :class="{ 'bg-red-200': !guest.active }"
                             >   
-                                <span x-show="guest.congrats" @click="modal.show(guest.congrats, guest.name)" class="cursor-pointer alltext-shown">
+                                <span x-show="guest.congrats" @click="modal.show(guest.congrats, guest.name)" class="cursor-pointer">
                                     <span x-text="guest.congrats ? (guest.congrats.length > 24 ? guest.congrats.slice(0, 24) + '…' : guest.congrats) : ''"></span>
                                     <span class="text-teal-500 ml-1">[Ver más]</span>
                                 </span>
-                                <span class="alltext-hidden">
-                                    <span x-text="guest.congrats"></span>
-                                </span>
                             </td>
+                            <td x-show="false"><span x-text="guest.congrats"></span></td>
                             <td class="p-2 md:table-cell  font-medium border border-blue-300" :class="{ 'bg-red-200': !guest.active }">
                                 <div class="flex gap-2 items-center">
                                     <a class="cursor-pointer group" @click="confirmModal.show('¿Eliminar a ' + guest.name + '?', () => deleteGuest(guest.id))">
